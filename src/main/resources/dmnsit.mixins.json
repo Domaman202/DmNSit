@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "ru.DmN.sit.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "SlabBlockMixin",
+    "StairsBlockMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

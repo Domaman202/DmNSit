@@ -9,9 +9,12 @@ import net.minecraft.world.World;
 public class SitEntity extends ArmorStandEntity {
     public SitEntity(World world, double x, double y, double z) {
         super(EntityType.ARMOR_STAND, world);
-        this.setPosition(x, y, z);
-        this.setInvisible(true);
         this.noClip = true;
+        var nbt = new NbtCompound();
+        nbt.putByte("NoGravity", (byte) 1);
+        nbt.putByte("Invisible", (byte) 1);
+        this.readNbt(nbt);
+        this.setPosition(x, y, z);
     }
 
     @Override

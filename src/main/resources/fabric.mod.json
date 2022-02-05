@@ -14,12 +14,16 @@
   },
 
   "license": "CC0-1.0",
-  "icon": "assets/modid/icon.png",
+  "icon": "assets/dmnsit/icon.png",
 
   "environment": "*",
   "entrypoints": {
     "main": [
       "ru.DmN.sit.Main"
     ]
-  }
+  },
+
+  "mixins": [
+    "dmnsit.mixins.json"
+  ]
 }
