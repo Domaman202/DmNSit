@@ -23,7 +23,7 @@ public class Main implements ModInitializer {
     public static void sit(ServerPlayerEntity player, ServerWorld world, Vec3d pos) {
         var block = world.getBlockState(new BlockPos(pos.x, pos.y, pos.z)).getBlock();
         var ss = block instanceof SlabBlock || block instanceof StairsBlock;
-        var entity = new SitEntity(world, ss ? (pos.x + 0.5) : pos.x, pos.y - (ss ? 1.2 : 1.7), ss ? (pos.z + 0.5) : pos.z);
+        var entity = new SitEntity(world, ss ? (Math.floor(pos.x) + 0.5) : pos.x, pos.y - (ss && pos.x != player.getX() && pos.z != player.getZ() ? 1.2 : 1.7), ss ? (Math.floor(pos.z) + 0.5) : pos.z);
         world.spawnEntity(entity);
         player.startRiding(entity);
     }
