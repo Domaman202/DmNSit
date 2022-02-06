@@ -1,43 +1,44 @@
 package ru.DmN.sit;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.decoration.ArmorStandEntity;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.decoration.ArmorStand;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 
-public class SitEntity extends ArmorStandEntity {
-    public Vec3d old;
+public class SitEntity extends ArmorStand {
+    public Vec3 old;
 
-    public SitEntity(World world, double x, double y, double z, Vec3d old) {
+    public SitEntity(Level world, double x, double y, double z, Vec3 old) {
         super(EntityType.ARMOR_STAND, world);
-        this.noClip = true;
-        var nbt = new NbtCompound();
+        this.noPhysics = true;
+        var nbt = new CompoundTag();
         nbt.putByte("NoGravity", (byte) 1);
         nbt.putByte("Invisible", (byte) 1);
-        this.readNbt(nbt);
-        this.setPosition(x, y, z);
+        this.deserializeNBT(nbt);
+        this.setPos(x, y, z);
         this.old = old;
     }
 
     @Override
-    protected void removePassenger(Entity passenger) {
-        passenger.setPosition(old);
+    protected void removePassenger(@NotNull Entity passenger) {
+        passenger.setPos(old);
         super.removePassenger(passenger);
         this.kill();
     }
 
     @Override
-    public void removeAllPassengers() {
-        this.getPassengerList().forEach((passenger) -> passenger.setPosition(old));
-        super.removeAllPassengers();
+    public void ejectPassengers() {
+        this.getPassengers().forEach((passenger) -> passenger.setPos(old));
+        super.ejectPassengers();
         this.kill();
     }
 
     @Override
-    public boolean saveNbt(NbtCompound nbt) {
+    public CompoundTag serializeNBT() {
         this.kill();
-        return false;
+        return super.serializeNBT();
     }
 }

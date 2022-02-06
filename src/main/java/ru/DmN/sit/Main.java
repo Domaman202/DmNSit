@@ -1,31 +1,37 @@
 package ru.DmN.sit;
 
-import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
-import net.minecraft.block.SlabBlock;
-import net.minecraft.block.StairsBlock;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.block.SlabBlock;
+import net.minecraft.world.level.block.StairBlock;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.server.ServerStartingEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 
-import static net.minecraft.server.command.CommandManager.literal;
+import static net.minecraft.commands.Commands.literal;
 
-public class Main implements ModInitializer {
-    @Override
-    public void onInitialize() {
-        ServerWorldEvents.LOAD.register((server, world_) -> server.getCommandManager().getDispatcher().register(literal("sit").executes(context -> {
-            var pos = context.getSource().getPosition();
-            sit(context.getSource().getPlayer(), context.getSource().getWorld(), pos, pos);
-            return 1;
-        })));
+@Mod("dmnsit")
+public class Main {
+    public Main() {
+        MinecraftForge.EVENT_BUS.register(this);
     }
 
-    public static void sit(ServerPlayerEntity player, ServerWorld world, Vec3d pos, Vec3d old) {
+    @SubscribeEvent
+    public void onServerStarting(ServerStartingEvent event) {
+        event.getServer().getCommands().getDispatcher().register(literal("sit").executes(context -> {
+            sit(context.getSource().getPlayerOrException(), context.getSource().getLevel(), context.getSource().getPosition());
+            return 1;
+        }));
+    }
+
+    public static void sit(ServerPlayer player, ServerLevel world, Vec3 pos) {
         var block = world.getBlockState(new BlockPos(pos.x, pos.y, pos.z)).getBlock();
-        var ss = block instanceof SlabBlock || block instanceof StairsBlock;
-        var entity = new SitEntity(world, ss ? (Math.floor(pos.x) + 0.5) : pos.x, pos.y - (ss && pos.x != player.getX() && pos.z != player.getZ() ? 1.2 : 1.7), ss ? (Math.floor(pos.z) + 0.5) : pos.z, old);
-        world.spawnEntity(entity);
+        var ss = block instanceof SlabBlock || block instanceof StairBlock;
+        var entity = new SitEntity(world, ss ? (Math.floor(pos.x) + 0.5) : pos.x, pos.y - (ss && pos.x != player.getX() && pos.z != player.getZ() ? 1.2 : 1.7), ss ? (Math.floor(pos.z) + 0.5) : pos.z, pos);
+        world.addFreshEntity(entity);
         player.startRiding(entity);
     }
 }
