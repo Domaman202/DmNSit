@@ -9,11 +9,11 @@
     "DomamaN202"
   ],
   "contact": {
-    "homepage": "https://github.com/Domaman202/DmNSit",
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/dmnsit",
     "sources": "https://github.com/Domaman202/DmNSit"
   },
 
-  "license": "CC0-1.0",
+  "license": "MIT",
   "icon": "assets/dmnsit/icon.png",
 
   "environment": "*",

@@ -25,7 +25,7 @@ public class SlabBlockMixin extends Block {
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         if (world.isClient)
             return ActionResult.CONSUME;
-        Main.sit((ServerPlayerEntity) player, (ServerWorld) world, new Vec3d(pos.getX(), pos.getY(), pos.getZ()));
+        Main.sit((ServerPlayerEntity) player, (ServerWorld) world, new Vec3d(pos.getX(), pos.getY(), pos.getZ()), player.getPos());
         return ActionResult.SUCCESS;
     }
 }

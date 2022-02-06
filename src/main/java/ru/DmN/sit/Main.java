@@ -15,15 +15,16 @@ public class Main implements ModInitializer {
     @Override
     public void onInitialize() {
         ServerWorldEvents.LOAD.register((server, world_) -> server.getCommandManager().getDispatcher().register(literal("sit").executes(context -> {
-            sit(context.getSource().getPlayer(), context.getSource().getWorld(), context.getSource().getPosition());
+            var pos = context.getSource().getPosition();
+            sit(context.getSource().getPlayer(), context.getSource().getWorld(), pos, pos);
             return 1;
         })));
     }
 
-    public static void sit(ServerPlayerEntity player, ServerWorld world, Vec3d pos) {
+    public static void sit(ServerPlayerEntity player, ServerWorld world, Vec3d pos, Vec3d old) {
         var block = world.getBlockState(new BlockPos(pos.x, pos.y, pos.z)).getBlock();
         var ss = block instanceof SlabBlock || block instanceof StairsBlock;
-        var entity = new SitEntity(world, ss ? (Math.floor(pos.x) + 0.5) : pos.x, pos.y - (ss && pos.x != player.getX() && pos.z != player.getZ() ? 1.2 : 1.7), ss ? (Math.floor(pos.z) + 0.5) : pos.z);
+        var entity = new SitEntity(world, ss ? (Math.floor(pos.x) + 0.5) : pos.x, pos.y - (ss && pos.x != player.getX() && pos.z != player.getZ() ? 1.2 : 1.7), ss ? (Math.floor(pos.z) + 0.5) : pos.z, old);
         world.spawnEntity(entity);
         player.startRiding(entity);
     }
