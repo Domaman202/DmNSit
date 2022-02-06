@@ -34,10 +34,4 @@ public class SitEntity extends ArmorStandEntity {
         super.removeAllPassengers();
         this.kill();
     }
-
-    @Override
-    public boolean saveNbt(NbtCompound nbt) {
-        this.kill();
-        return false;
-    }
 }
