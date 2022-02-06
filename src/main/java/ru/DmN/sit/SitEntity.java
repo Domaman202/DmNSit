@@ -30,7 +30,7 @@ public class SitEntity extends ArmorStandEntity {
 
     @Override
     public void removeAllPassengers() {
-        getPassengerList().forEach((passenger) -> passenger.setPosition(old));
+        this.getPassengerList().forEach((passenger) -> passenger.setPosition(old));
         super.removeAllPassengers();
         this.kill();
     }
