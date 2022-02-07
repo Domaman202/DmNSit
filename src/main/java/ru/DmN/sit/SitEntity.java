@@ -7,8 +7,6 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-import java.util.concurrent.CompletableFuture;
-
 public class SitEntity extends ArmorStandEntity {
     public Vec3d old;
 
@@ -25,26 +23,15 @@ public class SitEntity extends ArmorStandEntity {
 
     @Override
     protected void removePassenger(Entity passenger) {
+        passenger.setPosition(old);
         super.removePassenger(passenger);
-        CompletableFuture.runAsync(() -> {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            if (passenger.getVehicle() == null) {
-//                System.out.println(passenger.getVehicle() == this);
-                System.out.println("NIGGER KILLED!");
-                passenger.setPosition(old);
-                this.kill();
-            }
-        });
+        this.kill();
     }
 
     @Override
-    public boolean saveNbt(NbtCompound nbt) {
-        System.out.println("KILLED!");
+    public void removeAllPassengers() {
+        this.getPassengerList().forEach((passenger) -> passenger.setPosition(old));
+        super.removeAllPassengers();
         this.kill();
-        return false;
     }
 }
