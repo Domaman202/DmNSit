@@ -1,7 +1,7 @@
 package ru.DmN.sit;
 
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
+import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
 import net.minecraft.block.SlabBlock;
 import net.minecraft.block.StairsBlock;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -14,7 +14,7 @@ import static net.minecraft.server.command.CommandManager.literal;
 public class Main implements ModInitializer {
     @Override
     public void onInitialize() {
-        ServerWorldEvents.LOAD.register((server, world_) -> server.getCommandManager().getDispatcher().register(literal("sit").executes(context -> {
+        CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> dispatcher.register(literal("sit").executes(context -> {
             var pos = context.getSource().getPosition();
             sit(context.getSource().getPlayer(), context.getSource().getWorld(), pos, pos);
             return 1;
