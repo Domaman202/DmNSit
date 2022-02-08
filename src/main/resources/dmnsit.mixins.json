@@ -3,6 +3,7 @@
   "minVersion": "0.8",
   "package": "ru.DmN.sit.mixin",
   "compatibilityLevel": "JAVA_8",
+  "plugin": "ru.DmN.sit.MixinPlugin",
   "mixins": [
     "SlabBlockMixin",
     "StairsBlockMixin"
