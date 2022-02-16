@@ -23,6 +23,16 @@ public class SitEntity extends ArmorStand {
     }
 
     @Override
+    public void tick() {
+        super.tick();
+        if (this.getFirstPassenger() != null) {
+            this.setXRot(this.getFirstPassenger().getXRot());
+            this.setYRot(this.getFirstPassenger().getYRot());
+        }
+    }
+
+
+    @Override
     protected void removePassenger(@NotNull Entity passenger) {
         passenger.setPos(old);
         super.removePassenger(passenger);
