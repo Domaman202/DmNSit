@@ -24,6 +24,15 @@ public class SitEntity extends ArmorStandEntity {
     }
 
     @Override
+    public void tick() {
+        super.tick();
+        if (this.getFirstPassenger() != null) {
+            this.setPitch(this.getFirstPassenger().getPitch());
+            this.setYaw(this.getFirstPassenger().getYaw());
+        }
+    }
+
+    @Override
     protected void removePassenger(Entity passenger) {
         if (this.world.getBlockState(new BlockPos(old.x, old.y + 1, old.z)).getBlock() != Blocks.AIR)
             old = old.add(0, 1.5, 0);
