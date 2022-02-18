@@ -48,7 +48,8 @@ public class SitEntity extends ArmorStand {
 
     @Override
     public CompoundTag serializeNBT() {
-        this.ejectPassengers();
+        if (this.getFirstPassenger() == null)
+            this.ejectPassengers();
         return new CompoundTag();
     }
 }
