@@ -61,7 +61,7 @@ public class SitEntity extends ArmorStandEntity {
     @Override
     public boolean saveSelfNbt(NbtCompound nbt) {
         if (this.getFirstPassenger() != null)
-            return super.saveNbt(nbt);
+            return super.saveSelfNbt(nbt);
         this.removeAllPassengers();
         return false;
     }
