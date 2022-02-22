@@ -15,12 +15,21 @@ public class SitEntity extends ArmorStandEntity {
     public SitEntity(World world, double x, double y, double z, Vec3d old) {
         super(EntityType.ARMOR_STAND, world);
         this.noClip = true;
-        var nbt = new NbtCompound();
-        nbt.putByte("NoGravity", (byte) 1);
-        nbt.putByte("Invisible", (byte) 1);
-        this.readNbt(nbt);
+        this.setInvisible(true);
+        this.setInvulnerable(true);
+        this.setNoGravity(true);
         this.setPosition(x, y, z);
         this.old = old;
+    }
+
+    @Override
+    public boolean canMoveVoluntarily() {
+        return false;
+    }
+
+    @Override
+    public boolean collides() {
+        return false;
     }
 
     @Override
