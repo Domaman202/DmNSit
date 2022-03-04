@@ -11,15 +11,14 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
 
 import static net.minecraft.server.command.CommandManager.argument;
 import static net.minecraft.server.command.CommandManager.literal;
 
 public class Main implements ModInitializer {
-    public static final Map<ServerPlayerEntity, Boolean> autoSit = new HashMap<>();
+    public static final Set<PlayerEntity> autoSit = new HashSet<>();
 
     @Override
     public void onInitialize() {
@@ -31,7 +30,9 @@ public class Main implements ModInitializer {
             }));
 
             dispatcher.register(literal("asit").then(argument("active", BoolArgumentType.bool()).executes(context -> {
-                autoSit.put(context.getSource().getPlayer(), context.getArgument("active", boolean.class));
+                if (context.getArgument("active", boolean.class))
+                    autoSit.remove(context.getSource().getPlayer());
+                else autoSit.add(context.getSource().getPlayer());
                 return 1;
             })));
         });
