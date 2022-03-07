@@ -5,7 +5,6 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
 import net.minecraft.block.SlabBlock;
 import net.minecraft.block.StairsBlock;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
@@ -13,12 +12,13 @@ import net.minecraft.util.math.Vec3d;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 import static net.minecraft.server.command.CommandManager.argument;
 import static net.minecraft.server.command.CommandManager.literal;
 
 public class Main implements ModInitializer {
-    public static final Set<PlayerEntity> autoSit = new HashSet<>();
+    public static final Set<UUID> autoSit = new HashSet<>();
 
     @Override
     public void onInitialize() {
@@ -31,8 +31,8 @@ public class Main implements ModInitializer {
 
             dispatcher.register(literal("asit").then(argument("active", BoolArgumentType.bool()).executes(context -> {
                 if (context.getArgument("active", boolean.class))
-                    autoSit.remove(context.getSource().getPlayer());
-                else autoSit.add(context.getSource().getPlayer());
+                    autoSit.add(context.getSource().getPlayer().getGameProfile().getId());
+                else autoSit.remove(context.getSource().getPlayer().getGameProfile().getId());
                 return 1;
             })));
         });

@@ -24,8 +24,8 @@ public class StairsBlockMixin extends Block {
 
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-        if (world.isClient || Main.autoSit.contains(player))
-            return ActionResult.CONSUME;
+        if (world.isClient || Main.autoSit.contains(player.getGameProfile().getId()))
+            return super.onUse(state, world, pos, player, hand, hit);
         Main.sit((ServerPlayerEntity) player, (ServerWorld) world, new Vec3d(pos.getX(), pos.getY(), pos.getZ()), player.getPos());
         return ActionResult.SUCCESS;
     }
