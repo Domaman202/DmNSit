@@ -5,6 +5,8 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
 import net.minecraft.block.SlabBlock;
 import net.minecraft.block.StairsBlock;
+import net.minecraft.block.enums.BlockHalf;
+import net.minecraft.block.enums.SlabType;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
@@ -39,9 +41,12 @@ public class Main implements ModInitializer {
     }
 
     public static void sit(ServerPlayerEntity player, ServerWorld world, Vec3d pos, Vec3d old) {
-        var block = world.getBlockState(new BlockPos(pos.x, pos.y, pos.z)).getBlock();
-        var ss = block instanceof SlabBlock || block instanceof StairsBlock;
-        var entity = new SitEntity(world, ss ? (Math.floor(pos.x) + 0.5) : pos.x, pos.y - (ss && pos.x != player.getX() && pos.z != player.getZ() ? 1.2 : 1.7), ss ? (Math.floor(pos.z) + 0.5) : pos.z, old);
+        var state = world.getBlockState(new BlockPos(pos.x, pos.y, pos.z));
+        var block = state.getBlock();
+        var i = (block instanceof SlabBlock ? (state.get(SlabBlock.TYPE) == SlabType.BOTTOM ? 0 : 1) : 2);
+        if (i == 2)
+            i = (block instanceof StairsBlock ? (state.get(StairsBlock.HALF) == BlockHalf.BOTTOM ? 0 : 1) : 2);
+        var entity = new SitEntity(world, i != 2 ? (Math.floor(pos.x) + 0.5) : pos.x, i == 1 ? pos.y - 0.7 : pos.y - (i == 0 && pos.x != player.getX() && pos.z != player.getZ() ? 1.2 : 1.7), i != 2 ? (Math.floor(pos.z) + 0.5) : pos.z, old);
         world.spawnEntity(entity);
         player.startRiding(entity);
     }
