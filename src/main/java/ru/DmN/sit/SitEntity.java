@@ -37,8 +37,8 @@ public class SitEntity extends ArmorStandEntity {
         if (this.world.getBlockState(new BlockPos(old.x, old.y, old.z)).getBlock() != Blocks.AIR)
             old = old.add(0, 1, 0);
         passenger.setPosition(old);
-        super.removePassenger(passenger);
         this.kill();
+        super.removePassenger(passenger);
     }
 
     @Override
@@ -46,8 +46,8 @@ public class SitEntity extends ArmorStandEntity {
         if (this.world.getBlockState(new BlockPos(old.x, old.y, old.z)).getBlock() != Blocks.AIR)
             old = old.add(0, 1, 0);
         this.getPassengerList().forEach((passenger) -> passenger.setPosition(old));
-        super.removeAllPassengers();
         this.kill();
+        super.removeAllPassengers();
     }
 
     @Override
